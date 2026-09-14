@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+P="${1:-}"
+[[ "$P" =~ ^[0-9]+$ ]] || exit 2
+(( P>=5 && P<=100 )) || exit 2
+B="$(find /sys/class/backlight -mindepth 1 -maxdepth 1 -type l | head -n1 || true)"
+[[ -n "$B" ]] || { echo "No backlight device"; exit 3; }
+MAX="$(cat "$B/max_brightness")"
+VAL=$(( MAX * P / 100 ))
+(( VAL<1 )) && VAL=1
+echo "$VAL" > "$B/brightness"
