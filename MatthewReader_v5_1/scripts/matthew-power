@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+case "${1:-}" in
+  reboot) exec /usr/bin/systemctl reboot ;;
+  poweroff) exec /usr/bin/systemctl poweroff ;;
+  *) exit 2 ;;
+esac
