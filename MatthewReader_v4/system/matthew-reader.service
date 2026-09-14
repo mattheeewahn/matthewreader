@@ -1,0 +1,23 @@
+[Unit]
+Description=Matthew Reader Kiosk
+After=systemd-user-sessions.service udisks2.service
+Wants=udisks2.service
+Conflicts=getty@tty1.service
+
+[Service]
+User=matthew
+PAMName=login
+TTYPath=/dev/tty1
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+RuntimeDirectory=matthew-reader
+RuntimeDirectoryMode=0700
+Environment=XDG_RUNTIME_DIR=/run/matthew-reader
+Environment=QT_QPA_PLATFORM=wayland
+ExecStart=/usr/bin/dbus-run-session -- /usr/bin/cage -s -- /opt/matthew-reader/launch.sh
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=graphical.target
